@@ -16,7 +16,13 @@ const app = express();
 
 connectDB();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // your frontend
+    credentials: true
+  })
+);
+
 app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/items", itemRoutes);
