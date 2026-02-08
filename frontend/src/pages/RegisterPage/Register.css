@@ -1,0 +1,155 @@
+* {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.register-wrapper {
+  display: flex;
+  height: 100vh;
+  background: #0f172a;
+}
+
+/* LEFT SIDE */
+.left-side {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  overflow: hidden;
+}
+
+.left-side img {
+  width: 70%;
+  animation: floatImage 4s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes floatImage {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+/* RIGHT SIDE */
+.right-side {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #111827;
+}
+
+/* Glass Card */
+.glass-card {
+  width: 380px;
+  padding: 40px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  animation: slideIn 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.glass-card h1 {
+  color: white;
+  margin-bottom: 8px;
+}
+
+.glass-card p {
+  color: #9ca3af;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+/* Inputs */
+.input-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 12px 40px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: #1f2937;
+  color: white;
+  font-size: 14px;
+  transition: 0.3s ease;
+}
+
+.input-box input:focus {
+  border: 1px solid #2563eb;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.toggle-password:hover {
+  color: white;
+}
+
+/* Button */
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.register-btn:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.redirect-text {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.redirect-text span {
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.redirect-text span:hover {
+  text-decoration: underline;
+}

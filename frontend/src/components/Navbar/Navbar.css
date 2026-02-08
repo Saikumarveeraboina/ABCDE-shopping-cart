@@ -1,0 +1,68 @@
+.navbar {
+  height: 70px;
+  background: #111827;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  color: white;
+  font-weight: 600;
+  font-size: 20px;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.logo:hover {
+  color: #2563eb;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.nav-actions button {
+  margin-left: 15px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #1f2937;
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.3s ease;
+  font-size: 14px;
+}
+
+.nav-actions button:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.logout-btn {
+  background: #7f1d1d;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+/* Cart Badge */
+.badge {
+  background: #ef4444;
+  color: white;
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: 50%;
+  margin-left: 6px;
+  font-weight: 600;
+}
