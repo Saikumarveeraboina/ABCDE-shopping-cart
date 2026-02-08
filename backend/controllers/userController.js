@@ -41,31 +41,24 @@ exports.loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid username/password" });
     }
 
-    // 2️⃣ Enforce single-device rule
-    if (user.token) {
-      return res
-        .status(403)
-        .json({ message: "User is already logged in on another device." });
-    }
-
-    // 3️⃣ Compare password
+    // 2️⃣ Compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid username/password" });
     }
 
-    // 4️⃣ Generate JWT
+    // 3️⃣ Generate NEW token (overwrite old one)
     const token = jwt.sign(
       { _id: user._id },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
     );
 
-    // 5️⃣ Save token in DB
+    // 4️⃣ Save token in DB
     user.token = token;
     await user.save();
 
-    // 6️⃣ Return token
-    res.json({ token });
+    res.status(200).json({ token });
 
   } catch (error) {
     console.log("LOGIN ERROR:", error);

@@ -7,7 +7,11 @@
   height: 100vh;
   background: #0f172a;
 }
-
+@media (max-width: 768px) {
+  .login-wrapper {
+    flex-direction: column;
+  }
+}
 /* LEFT SIDE */
 .left-side {
   flex: 1;
@@ -17,6 +21,44 @@
   background: linear-gradient(135deg, #2563eb, #1e3a8a);
   overflow: hidden;
 }
+@media (max-width: 768px) {
+  .left-side {
+    flex: none;
+    height: 40vh;
+    display: flex;
+  }
+
+  .left-side img {
+    width: 60%;
+    height: auto;
+  }
+
+  .right-side {
+    flex: 1;
+    padding: 20px;
+  }
+
+  .glass-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
+  }
+}
+@media (max-width: 480px) {
+  .glass-card {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  .glass-card h1 {
+    font-size: 22px;
+  }
+
+  .glass-card p {
+    font-size: 13px;
+  }
+}
+
 
 .left-side img {
   width: 70%;
