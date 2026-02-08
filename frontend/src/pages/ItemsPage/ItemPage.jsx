@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import "./ItemPage.css";
 import Navbar from "../../components/Navbar/Navbar";
-import axios from "axios";
+import API from "../../api/axios";
 
 export default function ItemPage() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchItems();
@@ -12,30 +13,22 @@ export default function ItemPage() {
 
   const fetchItems = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/items");
-      setItems(res.data);
+      const res = await API.get("/items");
+      setItems(res.data || []);
     } catch (error) {
       console.log("Error fetching items:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAddToCart = async (itemId) => {
     try {
-      const token = localStorage.getItem("token");
-
-      await axios.post(
-        "http://localhost:5000/api/carts",
-        { itemId },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      await API.post("/carts", { itemId });
 
       alert("Item added to cart 🛒");
     } catch (error) {
-      console.log(error);
+      console.log("Add to Cart Error:", error);
       alert("Error adding item to cart");
     }
   };
@@ -45,7 +38,9 @@ export default function ItemPage() {
       <Navbar />
 
       <div className="items-grid">
-        {items.length === 0 ? (
+        {loading ? (
+          <p className="no-items">Loading products...</p>
+        ) : items.length === 0 ? (
           <p className="no-items">No products available</p>
         ) : (
           items.map((item) => (
@@ -58,7 +53,9 @@ export default function ItemPage() {
                 <h3>{item.name}</h3>
                 <p>₹ {item.price}</p>
 
-                <button onClick={() => handleAddToCart(item._id)}>
+                <button
+                  onClick={() => handleAddToCart(item._id)}
+                >
                   🛒 Add to Cart
                 </button>
               </div>

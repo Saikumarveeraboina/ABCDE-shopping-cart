@@ -1,7 +1,7 @@
 import "./OrdersPage.css";
 import Navbar from "../../components/Navbar/Navbar";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../api/axios";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -15,12 +15,7 @@ export default function OrdersPage() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get(
-        "http://localhost:5000/api/orders",
-        {
-          headers: { Authorization: token }
-        }
-      );
+     const res = await API.get("/orders");
 
       setOrders(res.data || []);
     } catch (error) {

@@ -2,8 +2,8 @@ import { useState } from "react";
 import "./Register.css";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import axios from "axios";
 import signupImage from "../../assets/signup.svg";
+import API from "../../api/axios";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -16,7 +16,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:5000/api/users/register", {
+      await API.post("/users/register", {
         username,
         password,
       });

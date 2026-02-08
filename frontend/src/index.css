@@ -1,0 +1,21 @@
+:root {
+  --bg-color: #0f172a;
+  --card-color: #1e293b;
+  --text-color: #ffffff;
+  --secondary-text: #94a3b8;
+  --primary-btn: #2563eb;
+}
+
+.light {
+  --bg-color: #f3f4f6;
+  --card-color: #ffffff;
+  --text-color: #1f2937;
+  --secondary-text: #6b7280;
+  --primary-btn: #3b82f6;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}

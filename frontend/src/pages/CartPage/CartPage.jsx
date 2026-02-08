@@ -1,148 +1,146 @@
 import { useEffect, useState } from "react";
 import "./CartPage.css";
 import Navbar from "../../components/Navbar/Navbar";
-import axios from "axios";
+import API from "../../api/axios";
 
 export default function CartPage() {
-    const [cart, setCart] = useState(null);
+  const [cart, setCart] = useState(null);
 
-    useEffect(() => {
-        fetchCart();
-    }, []);
+  useEffect(() => {
+    fetchCart();
+  }, []);
 
-    const fetchCart = async () => {
-        const token = localStorage.getItem("token");
+  const fetchCart = async () => {
+    try {
+      const res = await API.get("/carts");
+      setCart(res.data);
+    } catch (error) {
+      console.log("Fetch Cart Error:", error);
+    }
+  };
 
-        const res = await axios.get(
-            "http://localhost:5000/api/carts",
-            { headers: { Authorization: token } }
-        );
+  const updateQty = async (itemId, quantity) => {
+    try {
+      if (quantity <= 0) return; // prevent negative qty
 
-        setCart(res.data);
-    };
+      await API.put("/carts", { itemId, quantity });
 
-    const updateQty = async (itemId, quantity) => {
-        const token = localStorage.getItem("token");
+      fetchCart();
+    } catch (error) {
+      console.log("Update Qty Error:", error);
+    }
+  };
 
-        await axios.put(
-            "http://localhost:5000/api/carts",
-            { itemId, quantity },
-            { headers: { Authorization: token } }
-        );
+  const removeItem = async (itemId) => {
+    try {
+      await API.delete("/carts", {
+        data: { itemId }
+      });
 
-        fetchCart();
-    };
+      fetchCart();
+    } catch (error) {
+      console.log("Remove Item Error:", error);
+    }
+  };
 
-    const removeItem = async (itemId) => {
-        const token = localStorage.getItem("token");
+  const handleCheckout = async () => {
+    try {
+      await API.post("/orders");
 
-        await axios.delete(
-            "http://localhost:5000/api/carts",
-            {
-                headers: { Authorization: token },
-                data: { itemId }
-            }
-        );
+      alert("Order placed successfully 🎉");
 
-        fetchCart();
-    };
+      fetchCart();
+    } catch (error) {
+      console.log("Checkout Error:", error);
+      alert("Checkout failed");
+    }
+  };
 
-    const handleCheckout = async () => {
-        try {
-            const token = localStorage.getItem("token");
+  const calculateTotal = () => {
+    if (!cart?.items) return 0;
 
-            await axios.post(
-                "http://localhost:5000/api/orders",
-                {},
-                { headers: { Authorization: token } }
-            );
+    return cart.items.reduce((sum, item) => {
+      if (!item?.itemId) return sum;
 
-            alert("Order placed successfully 🎉");
+      return sum + (item.itemId.price || 0) * (item.quantity || 1);
+    }, 0);
+  };
 
-            fetchCart(); // refresh cart after order
+  return (
+    <div className="cart-wrapper">
+      <Navbar />
 
-        } catch (error) {
-            console.log(error);
-            alert("Checkout failed");
-        }
-    };
+      <div className="cart-container">
+        <h2>Your Cart 🛒</h2>
 
+        {!cart?.items || cart.items.length === 0 ? (
+          <p className="empty-cart">Cart is empty</p>
+        ) : (
+          <>
+            <div className="cart-items">
+              {cart.items.map((item) => {
+                if (!item?.itemId) return null;
 
-    const calculateTotal = () => {
-        if (!cart || !cart.items) return 0;
+                return (
+                  <div className="cart-item" key={item._id}>
+                    <img
+                      src={item.itemId.image}
+                      alt={item.itemId.name}
+                    />
 
-        return cart.items.reduce(
-            (sum, item) =>
-               sum + (item.itemId.price || 0) * (item.quantity || 1),
+                    <div className="cart-details">
+                      <h4>{item.itemId.name}</h4>
+                      <p>₹ {item.itemId.price}</p>
 
-            0
-        );
-    };
+                      <div className="quantity-controls">
+                        <button
+                          onClick={() =>
+                            updateQty(
+                              item.itemId._id,
+                              item.quantity - 1
+                            )
+                          }
+                        >
+                          -
+                        </button>
 
-    return (
-        <div className="cart-wrapper">
-            <Navbar />
+                        <span>{item.quantity}</span>
 
-            <div className="cart-container">
-                <h2>Your Cart 🛒</h2>
+                        <button
+                          onClick={() =>
+                            updateQty(
+                              item.itemId._id,
+                              item.quantity + 1
+                            )
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
 
-                {!cart || !cart.items || cart.items.length === 0 ? (
-                    <p className="empty-cart">Cart is empty</p>
-                ) : (
-                    <>
-                        <div className="cart-items">
-                            {cart.items.map((item) => (
-                                <div className="cart-item" key={item._id}>
-                                    <img
-                                        src={item.itemId.image}
-                                        alt={item.itemId.name}
-                                    />
-
-                                    <div className="cart-details">
-                                        <h4>{item.itemId.name}</h4>
-                                        <p>₹ {item.itemId.price}</p>
-
-                                        <div className="quantity-controls">
-                                            <button onClick={() =>
-                                                updateQty(
-                                                    item.itemId._id,
-                                                    item.quantity - 1
-                                                )
-                                            }>-</button>
-
-                                            <span>{item.quantity}</span>
-
-                                            <button onClick={() =>
-                                                updateQty(
-                                                    item.itemId._id,
-                                                    item.quantity + 1
-                                                )
-                                            }>+</button>
-                                        </div>
-
-                                        <button
-                                            className="remove-btn"
-                                            onClick={() =>
-                                                removeItem(item.itemId._id)
-                                            }
-                                        >
-                                            Remove
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="checkout-section">
-                            <h3>Total: ₹ {calculateTotal()}</h3>
-                            <button onClick={handleCheckout}>
-                                Proceed to Checkout
-                            </button>
-
-                        </div>
-                    </>
-                )}
+                      <button
+                        className="remove-btn"
+                        onClick={() =>
+                          removeItem(item.itemId._id)
+                        }
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-        </div>
-    );
+
+            <div className="checkout-section">
+              <h3>Total: ₹ {calculateTotal()}</h3>
+              <button onClick={handleCheckout}>
+                Proceed to Checkout
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
 }

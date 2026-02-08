@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import axios from "axios";
+import API from "../../api/axios";
 import loginImage from "../../assets/signin.svg";
 
 export default function Login() {
@@ -16,10 +16,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/users/login",
-        { username, password }
-      );
+      const res = await API.post("/users/login", { username, password });
 
       localStorage.setItem("token", res.data.token);
       navigate("/items");

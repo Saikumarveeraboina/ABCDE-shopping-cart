@@ -1,5 +1,7 @@
 .items-wrapper {
-  background: #0f172a;
+  background: var(--card-color);
+color: var(--text-color);
+
   min-height: 100vh;
 }
 
