@@ -18,7 +18,10 @@ connectDB();
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // your frontend
+    origin: [
+      "http://localhost:5173",
+      "https://abcde-shopping-cart.vercel.app"
+    ],
     credentials: true
   })
 );
